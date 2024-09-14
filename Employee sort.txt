@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+
+class Employee {
+    private int empId;
+    private String empName;
+    private double salary;
+    private String location;
+
+    public Employee(int empId, String empName, double salary, String location) {
+        this.empId = empId;
+        this.empName = empName;
+        this.salary = salary;
+        this.location = location;
+    }
+
+    public int getEmpId() {
+        return empId;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee ID: " + empId + ", Name: " + empName + ", Salary: " + salary + ", Location: " + location;
+    }
+}
+
+public class EmployeeManagement {
+
+    public static void main(String[] args) {
+        ArrayList<Employee> employees = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+
+        // Accept employee data
+        System.out.println("Enter number of employees:");
+        int n = scanner.nextInt();
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter details for employee " + (i + 1) + ":");
+            System.out.print("Employee ID: ");
+            int empId = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Employee Name: ");
+            String empName = scanner.nextLine();
+            System.out.print("Salary: ");
+            double salary = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Location: ");
+            String location = scanner.nextLine();
+            employees.add(new Employee(empId, empName, salary, location));
+        }
+
+        // Menu for sorting and searching
+        while (true) {
+            System.out.println("\nChoose an option:");
+            System.out.println("1. Sort by Employee ID");
+            System.out.println("2. Sort by Employee Name");
+            System.out.println("3. Sort by Salary");
+            System.out.println("4. Sort by Location");
+            System.out.println("5. Search by Employee ID");
+            System.out.println("6. Exit");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    Collections.sort(employees, Comparator.comparingInt(Employee::getEmpId));
+                    System.out.println("Sorted by Employee ID:");
+                    displayEmployees(employees);
+                    break;
+                case 2:
+                    Collections.sort(employees, Comparator.comparing(Employee::getEmpName));
+                    System.out.println("Sorted by Employee Name:");
+                    displayEmployees(employees);
+                    break;
+                case 3:
+                    Collections.sort(employees, Comparator.comparingDouble(Employee::getSalary));
+                    System.out.println("Sorted by Salary:");
+                    displayEmployees(employees);
+                    break;
+                case 4:
+                    Collections.sort(employees, Comparator.comparing(Employee::getLocation));
+                    System.out.println("Sorted by Location:");
+                    displayEmployees(employees);
+                    break;
+                case 5:
+                    System.out.print("Enter Employee ID to search: ");
+                    int searchId = scanner.nextInt();
+                    searchEmployeeById(employees, searchId);
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void displayEmployees(ArrayList<Employee> employees) {
+        for (Employee emp : employees) {
+            System.out.println(emp);
+        }
+    }
+
+    private static void searchEmployeeById(ArrayList<Employee> employees, int empId) {
+        for (Employee emp : employees) {
+            if (emp.getEmpId() == empId) {
+                System.out.println("Employee found: " + emp);
+                return;
+            }
+        }
+        System.out.println("Employee with ID " + empId + " not found.");
+    }
+}

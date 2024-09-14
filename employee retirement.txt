@@ -1,0 +1,89 @@
+import java.util.Hashtable;
+import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.DateTimeParseException;
+
+class Student {
+    private int rollNo;
+    private LocalDate dateOfBirth;
+    private String name;
+    private String streamOfEducation;
+
+    // Constructor
+    public Student(int rollNo, LocalDate dateOfBirth, String name, String streamOfEducation) {
+        this.rollNo = rollNo;
+        this.dateOfBirth = dateOfBirth;
+        this.name = name;
+        this.streamOfEducation = streamOfEducation;
+    }
+
+    // Getters and Setters
+    public int getRollNo() {
+        return rollNo;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStreamOfEducation() {
+        return streamOfEducation;
+    }
+
+    @Override
+    public String toString() {
+        return "Roll No: " + rollNo + ", Name: " + name + ", Date of Birth: " + dateOfBirth + ", Stream: " + streamOfEducation;
+    }
+}
+
+public class StudentDataManagement {
+
+    public static void main(String[] args) {
+        Hashtable<Integer, Student> studentTable = new Hashtable<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Scanner scanner = new Scanner(System.in);
+
+        // Adding a student to the hashtable
+        System.out.print("Enter student's roll number: ");
+        int rollNo = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Enter student's date of birth (yyyy-MM-dd): ");
+        String dobInput = scanner.nextLine();
+        LocalDate dateOfBirth = parseDate(dobInput, formatter);
+
+        System.out.print("Enter student's name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter student's stream of education: ");
+        String streamOfEducation = scanner.nextLine();
+
+        Student student = new Student(rollNo, dateOfBirth, name, streamOfEducation);
+        studentTable.put(rollNo, student);
+
+        // Display the student data
+        System.out.println("\nStudent Details:");
+        Student retrievedStudent = studentTable.get(rollNo);
+        if (retrievedStudent != null) {
+            System.out.println(retrievedStudent);
+        } else {
+            System.out.println("No student found with roll number " + rollNo);
+        }
+
+        scanner.close();
+    }
+
+    private static LocalDate parseDate(String dateInput, DateTimeFormatter formatter) {
+        try {
+            return LocalDate.parse(dateInput, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+            return LocalDate.now(); // Return current date as a fallback
+        }
+    }
+}

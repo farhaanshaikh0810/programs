@@ -1,0 +1,32 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.Period;
+import java.util.Scanner;
+import java.time.DateTimeException;
+
+public class AgeCalculator {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        System.out.print("Enter your date of birth (yyyy-MM-dd): ");
+        String input = scanner.nextLine();
+
+        try {
+            // Parse the input date
+            LocalDate dob = LocalDate.parse(input, formatter);
+            LocalDate today = LocalDate.now();
+
+            // Calculate age
+            Period period = Period.between(dob, today);
+            int age = period.getYears();
+
+            System.out.println("Your current age is: " + age);
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+        } catch (DateTimeException e) {
+            System.out.println("Invalid date provided. Please check the date and try again.");
+        }
+    }
+}
